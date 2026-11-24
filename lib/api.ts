@@ -6,7 +6,7 @@ interface FetchNotesResponse {
   totalPages: number;
 }
 
-interface CreateNote {
+export interface CreateNote {
   title: string;
   content: string;
   tag: Note['tag'];

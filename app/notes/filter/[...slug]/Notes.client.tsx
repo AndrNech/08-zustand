@@ -1,30 +1,31 @@
-"use client";
+'use client';
 
-import css from "./NotesPage.module.css";
-import { fetchNotes } from "@/lib/api";
-import { useState, useEffect } from "react";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { Toaster, toast } from "react-hot-toast";
-import { useDebouncedCallback } from "use-debounce";
+import css from './NotesPage.module.css';
+import { fetchNotes } from '@/lib/api';
+import { useState, useEffect } from 'react';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { Toaster, toast } from 'react-hot-toast';
+import { useDebouncedCallback } from 'use-debounce';
+import Link from 'next/link';
 
-import SearchBox from "@/components/SearchBox/SearchBox";
-import Pagination from "@/components/Pagination/Pagination";
-import NoteList from "@/components/NoteList/NoteList";
-import Modal from "@/components/Modal/Modal";
-import NoteForm from "@/components/NoteForm/NoteForm";
-import type {Note} from '@/types/note';
+import SearchBox from '@/components/SearchBox/SearchBox';
+import Pagination from '@/components/Pagination/Pagination';
+import NoteList from '@/components/NoteList/NoteList';
+// import Modal from "@/components/Modal/Modal";
+// import NoteForm from "@/components/NoteForm/NoteForm";
+import type { Note } from '@/types/note';
 
 interface NotesClientProps {
-  tag?: Note["tag"] | undefined;
+  tag?: Note['tag'] | undefined;
 }
 
-export default function NotesClient({ tag = undefined}: NotesClientProps) {
-  const [search, setSearch] = useState("");
+export default function NotesClient({ tag = undefined }: NotesClientProps) {
+  const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data, isSuccess } = useQuery({
-    queryKey: ["notes", page, search, tag],
+    queryKey: ['notes', page, search, tag],
     queryFn: () => fetchNotes(page, search, tag),
     placeholderData: keepPreviousData,
     refetchOnMount: false,
@@ -32,7 +33,7 @@ export default function NotesClient({ tag = undefined}: NotesClientProps) {
 
   useEffect(() => {
     if (isSuccess && data.notes.length === 0) {
-      toast.error("Nothing found");
+      toast.error('Nothing found');
     }
   }, [isSuccess, data]);
 
@@ -45,9 +46,9 @@ export default function NotesClient({ tag = undefined}: NotesClientProps) {
     setPage(page);
   }
 
-  function closeModalHandler() {
-    setIsModalOpen(false);
-  }
+  // function closeModalHandler() {
+  //   setIsModalOpen(false);
+  // }
 
   return (
     <div className={css.app}>
@@ -71,24 +72,31 @@ export default function NotesClient({ tag = undefined}: NotesClientProps) {
             />
           )}
 
-          <button
+          <Link
             className={css.button}
-            onClick={() => setIsModalOpen(true)}
+            href={'/notes/action/create'} // onClick={() => setIsModalOpen(true)}
           >
             Create note +
-          </button>
+          </Link>
         </header>
       )}
 
-      {isSuccess && data.notes.length > 0 && (
-        <NoteList notes={data.notes} />
-      )}
+      {isSuccess && data.notes.length > 0 && <NoteList notes={data.notes} />}
 
-      {isModalOpen && (
+      {/* {isModalOpen && (
         <Modal onClose={closeModalHandler}>
           <NoteForm onClose={closeModalHandler} />
         </Modal>
-      )}
+      )} */}
     </div>
   );
 }
+
+/**
+видаліть розмітку модального вікна та компонент NoteForm, який раніше рендерився всередині модалки;
+видаліть стани, обробники подій та іншу логіку, пов’язану з модальним вікном.
+
+
+Кнопка Create note + більше не повинна відкривати модальне вікно.
+Замість цього вона має бути посиланням, яке веде на маршрут /notes/action/create
+ */
