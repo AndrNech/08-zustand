@@ -1,7 +1,9 @@
+'use client'
+
 import css from './NoteForm.module.css';
 // import { Formik, Form, Field, ErrorMessage, type FormikHelpers } from 'formik';
 // import * as Yup from 'yup';
-import router from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createNote, CreateNote } from '@/lib/api';
 import { useNoteDraftStore } from '@/lib/store/noteStore'
@@ -36,6 +38,7 @@ import { useNoteDraftStore } from '@/lib/store/noteStore'
 // type NoteTag = 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping';
 
 export default function NoteForm() {
+  const router = useRouter();
   const { draft, setDraft, clearDraft } = useNoteDraftStore();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement
@@ -60,11 +63,11 @@ export default function NoteForm() {
   const queryClient = useQueryClient();
 
   async function handleSubmit(formData: FormData) {
-    const values = Object.fromEntries(formData) as CreateNote;
-    // const title = (formData.get('title') as string) || '';
-    // const content = (formData.get('content') as string) || '';
-    // const tag = (formData.get('tag') as NoteTag) || 'Todo';
-    // await mutateAsync({title, content, tag});
+    const values: CreateNote = {
+      title: (formData.get('title') as string) || '',
+      content: (formData.get('content') as string) || '',
+      tag: (formData.get('tag') as CreateNote['tag']) || 'Todo',
+    };
     await mutateAsync(values);
   }
 
