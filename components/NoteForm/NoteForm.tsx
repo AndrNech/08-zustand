@@ -38,6 +38,7 @@ import { useNoteDraftStore } from '@/lib/store/noteStore'
 // type NoteTag = 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping';
 
 export default function NoteForm() {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { draft, setDraft, clearDraft } = useNoteDraftStore();
 
@@ -59,8 +60,6 @@ export default function NoteForm() {
       console.error(error);
     },
   });
-
-  const queryClient = useQueryClient();
 
   async function handleSubmit(formData: FormData) {
     const values: CreateNote = {
