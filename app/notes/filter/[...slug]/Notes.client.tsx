@@ -54,7 +54,7 @@ export default function NotesClient({ tag = undefined }: NotesClientProps) {
     <div className={css.app}>
       <Toaster />
 
-      {/* {isSuccess && ( */}
+      {isSuccess && (
         <header className={css.toolbar}>
           <SearchBox search={search} onSearch={handleSearch} />
 
@@ -79,7 +79,7 @@ export default function NotesClient({ tag = undefined }: NotesClientProps) {
             Create note +
           </Link>
         </header>
-      {/* )} */}
+      )}
 
       {isSuccess && data.notes.length > 0 && <NoteList notes={data.notes} />}
 
